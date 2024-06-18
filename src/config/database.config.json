@@ -1,0 +1,14 @@
+{
+  "local": {
+    "autoLoadModels": true,
+    "dialect": "sqlite",
+    "storage": "src/database/db.sqlite3",
+    "synchronize": true
+  },
+  "test": {
+    "autoLoadModels": true,
+    "dialect": "sqlite",
+    "storage": ":memory:",
+    "synchronize": true
+  }
+}
