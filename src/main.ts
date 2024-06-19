@@ -12,6 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
 
   const config = new DocumentBuilder()
+    .addBearerAuth(undefined, 'BearerJWT')
     .setTitle('NestJS template')
     .setDescription('API Docs for NestJS template')
     .setVersion('1.0')
