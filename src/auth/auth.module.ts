@@ -20,7 +20,7 @@ import { AuthGuard } from './guards/auth.guard';
       useFactory: (configService: ConfigService<Config>) => ({
         global: true,
         secret: configService.get('secret'),
-        signOptions: { expiresIn: '1h' },
+        signOptions: { expiresIn: '1d' },
       }),
     }),
     PermissionsModule,

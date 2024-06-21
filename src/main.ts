@@ -10,6 +10,7 @@ async function bootstrap() {
   app.enableCors();
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.setGlobalPrefix('/api');
 
   const config = new DocumentBuilder()
     .addBearerAuth(undefined, 'BearerJWT')
@@ -21,7 +22,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   const configService = app.get(ConfigService);
-  const PORT = configService.get('PORT') ?? 3000;
+  const PORT = configService.get('PORT') ?? 3008;
 
   const logger = new Logger('APP');
   logger.log(`App listening on port: ${PORT}`);

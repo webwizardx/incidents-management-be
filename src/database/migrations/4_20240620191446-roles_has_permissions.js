@@ -6,7 +6,6 @@ module.exports = {
     return queryInterface.createTable('roles_has_permissions', {
       id: {
         autoIncrement: true,
-        defaultValue: Sequelize.DataTypes.BIGINT,
         primaryKey: true,
         type: Sequelize.BIGINT,
       },

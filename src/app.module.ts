@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import configuration, { Config } from './config/configuration';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import configuration, { Config } from './config/configuration';
         return databaseConfig['local'] as SequelizeModuleOptions;
       },
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

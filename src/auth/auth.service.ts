@@ -11,12 +11,17 @@ export class AuthService {
   ) {}
 
   async signIn(email: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne({ where: { email } });
+    const user = await this.usersService.findOne(
+      {
+        where: { email },
+      },
+      'withPassword'
+    );
     const isNotMatch = !user || !(await isMatch(password, user?.password));
     if (isNotMatch) {
       throw new UnauthorizedException();
     }
-    delete user.password;
+    delete user.dataValues.password;
     const payload = { sub: user.id, user };
     return {
       access_token: await this.jwtService.signAsync(payload),

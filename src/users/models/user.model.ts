@@ -9,19 +9,29 @@ import {
 import { Role } from 'src/permissions/models/role.model';
 
 @Table({
+  defaultScope: {
+    attributes: { exclude: ['password'] },
+  },
   paranoid: true,
+  scopes: {
+    withPassword: {
+      attributes: {
+        include: ['password'],
+      },
+    },
+  },
   tableName: 'users',
   underscored: true,
 })
 export class User extends Model {
   @Column({
     type: DataTypes.TEXT,
+    unique: true,
   })
   email: string;
 
   @Column({
     autoIncrement: true,
-    defaultValue: DataTypes.BIGINT,
     primaryKey: true,
     type: DataTypes.BIGINT,
   })

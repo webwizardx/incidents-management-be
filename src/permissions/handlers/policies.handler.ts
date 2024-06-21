@@ -1,6 +1,6 @@
 import { AppAbility } from '../permissions-ability.factory/permissions-ability.factory';
 
-interface IPolicyHandler {
+export interface IPolicyHandler {
   handle(ability: AppAbility): boolean;
 }
 

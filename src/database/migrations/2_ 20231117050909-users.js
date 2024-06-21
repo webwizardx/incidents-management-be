@@ -19,7 +19,7 @@ module.exports = {
         unique: true,
       },
       id: {
-        defaultValue: Sequelize.DataTypes.BIGINT,
+        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT,
       },

@@ -18,7 +18,6 @@ import { RoleHasPermission } from './role-has-permission.model';
 export class Role extends Model {
   @Column({
     autoIncrement: true,
-    defaultValue: DataTypes.BIGINT,
     primaryKey: true,
     type: DataTypes.BIGINT,
   })

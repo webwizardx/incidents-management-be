@@ -7,7 +7,6 @@ module.exports = {
       action: Sequelize.TEXT,
       id: {
         autoIncrement: true,
-        defaultValue: Sequelize.DataTypes.BIGINT,
         primaryKey: true,
         type: Sequelize.BIGINT,
       },
