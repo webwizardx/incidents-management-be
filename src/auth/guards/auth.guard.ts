@@ -7,14 +7,19 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/sequelize';
 import { Request } from 'express';
 import { Config } from 'src/config/configuration';
+import { Permission } from 'src/permissions/models/permission.model';
+import { Role } from 'src/permissions/models/role.model';
+import { User } from 'src/users/models/user.model';
 import { NO_AUTH_KEY } from './no-auth.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private configService: ConfigService<Config>,
+    @InjectModel(User) private readonly user: typeof User,
     private jwtService: JwtService,
     private reflector: Reflector
   ) {}
@@ -38,7 +43,20 @@ export class AuthGuard implements CanActivate {
       });
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
-      request['user'] = payload.user;
+      const user = await this.user.findByPk(payload.sub, {
+        include: [
+          {
+            model: Role,
+            include: [Permission],
+          },
+        ],
+      });
+
+      if (!user) {
+        throw new UnauthorizedException();
+      }
+
+      request['user'] = user;
     } catch {
       throw new UnauthorizedException();
     }

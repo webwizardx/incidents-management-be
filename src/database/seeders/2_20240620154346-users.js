@@ -17,23 +17,23 @@ module.exports = {
 
     const users = [
       {
-        createdAt: new Date(),
-        email: 'jonathanalvarado1407@gmail.com',
-        firstName: 'Jonathan',
-        lastName: 'Alvarado',
+        created_at: new Date(),
+        email: 'john@doe.com',
+        first_name: 'Jonathan',
+        last_name: 'Alvarado',
         password: await bcrypt.hash('password', 10),
-        userId: faker.string.uuid(),
+        role_id: 1,
       },
     ];
 
     for (let i = 0; i < 10; ++i) {
       users.push({
-        createdAt: new Date(),
+        created_at: new Date(),
         email: faker.internet.email(),
-        firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
         password: await bcrypt.hash('password', 10),
-        userId: faker.string.uuid(),
+        role_id: 3,
       });
     }
 
