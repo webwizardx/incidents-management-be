@@ -15,6 +15,12 @@ export type AppAbility = PureAbility<[Action, Subjects]>;
 
 @Injectable()
 export class PermissionsAbilityFactory {
+  /**
+   * Creates an ability instance for a given user.
+   * @param user - The user for whom to create the ability instance.
+   * @returns The ability instance for the user.
+   * @author Jonathan Alvarado
+   */
   createForUser(user: User) {
     const { can, build } = new AbilityBuilder<PureAbility<[Action, Subjects]>>(
       PureAbility as AbilityClass<AppAbility>

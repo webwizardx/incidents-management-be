@@ -14,6 +14,12 @@ export class PoliciesGuard implements CanActivate {
     private permissionsAbilityFactory: PermissionsAbilityFactory
   ) {}
 
+  /**
+   * Determines if the user is authorized to access the requested resource based on the defined policies.
+   * @param context - The execution context of the request.
+   * @returns A promise that resolves to a boolean indicating whether the user is authorized.
+   * @author Jonathan Alvarado
+   */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const policyHandlers =
       this.reflector.get<PolicyHandler[]>(

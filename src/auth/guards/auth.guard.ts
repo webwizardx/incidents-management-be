@@ -24,6 +24,14 @@ export class AuthGuard implements CanActivate {
     private reflector: Reflector
   ) {}
 
+  /**
+   * Checks if the user is authorized to access the requested route.
+   *
+   * @param context - The execution context of the route.
+   * @returns A promise that resolves to a boolean indicating whether the user is authorized.
+   * @throws UnauthorizedException if the user is not authorized.
+   * @author Jonathan Alvarado
+   */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const NO_AUTH = this.reflector.getAllAndOverride<boolean>(NO_AUTH_KEY, [
       context.getHandler(),

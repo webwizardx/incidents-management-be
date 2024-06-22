@@ -8,6 +8,12 @@ import { User } from 'src/users/models/user.model';
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
+  /**
+   * Determines if the user has the required roles to access the resource.
+   * @param context - The execution context of the request.
+   * @returns A boolean indicating whether the user has the required roles.
+   * @author Jonathan Alvarado
+   */
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),

@@ -10,6 +10,14 @@ export class AuthService {
     private usersService: UsersService
   ) {}
 
+  /**
+   * Sign in a user with the provided email and password.
+   * @param email - The email of the user.
+   * @param password - The password of the user.
+   * @returns A promise that resolves to an object containing the access token and the user.
+   * @throws UnauthorizedException if the email or password is incorrect.
+   * @author Jonathan Alvarado
+   */
   async signIn(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOne(
       {

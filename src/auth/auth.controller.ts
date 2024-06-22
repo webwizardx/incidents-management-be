@@ -17,6 +17,13 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @NO_AUTH()
   @Post('login')
+  /**
+   * Signs in a user.
+   *
+   * @param signInDto - The sign-in data transfer object.
+   * @returns A promise that resolves to the signed-in user.
+   * @author Jonathan Alvarado
+   */
   signIn(@Body() signInDto: SignInDTO) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
