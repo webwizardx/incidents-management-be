@@ -26,12 +26,21 @@ module.exports = {
       },
     ];
 
-    for (let i = 0; i < 10; ++i) {
+    for (let i = 0; i < 30; ++i) {
+      const first_name = faker.person.firstName().split(' ')[0];
+      const last_name = faker.person.lastName().split(' ')[0];
       users.push({
         created_at: new Date(),
-        email: faker.internet.email(),
-        first_name: faker.person.firstName(),
-        last_name: faker.person.lastName(),
+        email: faker.internet
+          .email({
+            allowSpecialCharacters: false,
+            firstName: first_name,
+            lastName: last_name,
+            provider: 'mercantilseguros.com',
+          })
+          .toLocaleLowerCase(),
+        first_name,
+        last_name,
         password: await bcrypt.hash('password', 10),
         role_id: 3,
       });

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from 'src/users/models/user.model';
+import { UsersModule } from 'src/users/users.module';
 import { Permission } from './models/permission.model';
 import { RoleHasPermission } from './models/role-has-permission.model';
 import { Role } from './models/role.model';
@@ -13,6 +14,7 @@ import { RolesService } from './roles.service';
 @Module({
   imports: [
     SequelizeModule.forFeature([Permission, Role, RoleHasPermission, User]),
+    UsersModule,
   ],
   exports: [PermissionsAbilityFactory],
   providers: [PermissionsAbilityFactory, PermissionsService, RolesService],

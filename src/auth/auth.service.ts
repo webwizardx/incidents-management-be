@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { isMatch } from 'src/helpers/hash';
+import { Role } from 'src/permissions/models/role.model';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -21,6 +22,7 @@ export class AuthService {
   async signIn(email: string, password: string): Promise<any> {
     const user = await this.usersService.findOne(
       {
+        include: Role,
         where: { email },
       },
       'withPassword'

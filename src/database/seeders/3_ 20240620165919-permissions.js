@@ -19,6 +19,10 @@ module.exports = {
       },
       {
         action: 'read',
+        subject: 'roles',
+      },
+      {
+        action: 'read',
         subject: 'users',
       },
       {

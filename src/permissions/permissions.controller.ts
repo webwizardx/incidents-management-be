@@ -10,12 +10,19 @@ import {
   Post,
   Put,
   Query,
+  Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UsersService } from 'src/users/users.service';
 import { CheckPolicies } from './decorators/check-policies.decorator';
+import { CheckUserPermissionDto } from './dto/check-user-permission.dto';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { PatchPermissionDto } from './dto/patch-permission.dto';
 import { QueryPermissionDto } from './dto/query-permission.dto';
+import { QueryUserPermissionDto } from './dto/query-user-permission.dto';
+import { Permission } from './models/permission.model';
+import { Role as RoleModel } from './models/role.model';
+import { PermissionsAbilityFactory } from './permissions-ability.factory/permissions-ability.factory';
 import { PermissionsService } from './permissions.service';
 import {
   CreatePermissionPolicyHandler,
@@ -23,12 +30,15 @@ import {
   ReadPermissionPolicyHandler,
   UpdatePermissionPolicyHandler,
 } from './policies/permissions';
-
 @ApiBearerAuth('BearerJWT')
 @ApiTags('Permissions')
 @Controller('permissions')
 export class PermissionsController {
-  constructor(private readonly permissionsService: PermissionsService) {}
+  constructor(
+    private permissionsAbilityFactory: PermissionsAbilityFactory,
+    private readonly permissionsService: PermissionsService,
+    private readonly usersService: UsersService
+  ) {}
 
   @ApiOperation({
     description: 'This endpoint is used to create a permission',
@@ -45,6 +55,116 @@ export class PermissionsController {
    */
   async create(@Body() body: CreatePermissionDto) {
     return this.permissionsService.create(body);
+  }
+
+  @ApiOperation({
+    description:
+      'This endpoint is used to check if the current user has permission',
+    summary: 'Check if the current user has permission',
+  })
+  @Get('/users/check-current')
+  /**
+   * Checks the current user's permission for a specific action and subject.
+   *
+   * @param req - The request object containing user information.
+   * @param query - The query object containing the action and subject.
+   * @returns An object with the action, subject, and whether the user has permission for the action and subject.
+   * @throws NotFoundException if the user with the specified id is not found.
+   * @author Jonathan Alvarado
+   */
+  async checkCurrentUserPermission(
+    @Req() req: any,
+    @Query() query: CheckUserPermissionDto
+  ) {
+    const id = req.user.id;
+    const { action, subject } = query;
+    const user = await this.usersService.findOne({
+      where: { id },
+      include: [
+        {
+          model: RoleModel,
+          include: [Permission],
+        },
+      ],
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    const ability = this.permissionsAbilityFactory.createForUser(user);
+
+    return {
+      action,
+      hasPermission: ability.can(action, subject),
+      subject,
+    };
+  }
+
+  @ApiOperation({
+    description: 'This endpoint is used to check if a user has permission',
+    summary: 'Check if a user has permission',
+  })
+  @Get('/users/check/:id')
+  /**
+   * Checks the user's permission for a specific action and subject.
+   *
+   * @param id - The ID of the user.
+   * @param query - The query parameters containing the action and subject.
+   * @returns An object containing the action, whether the user has permission, and the subject.
+   * @throws NotFoundException if the user with the specified ID is not found.
+   * @author Jonathan Alvarado
+   */
+  async checkUserPermission(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() query: CheckUserPermissionDto
+  ) {
+    const { action, subject } = query;
+    const user = await this.usersService.findOne({
+      where: { id },
+      include: [
+        {
+          model: RoleModel,
+          include: [Permission],
+        },
+      ],
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    const ability = this.permissionsAbilityFactory.createForUser(user);
+
+    return {
+      action,
+      hasPermission: ability.can(action, subject),
+      subject,
+    };
+  }
+
+  @ApiOperation({
+    description:
+      'This endpoint is used to get a list of permissions for a user',
+    summary: 'Get a list of permissions for a user',
+  })
+  @CheckPolicies(new ReadPermissionPolicyHandler())
+  @Get('/users')
+  /**
+   * Retrieves the permissions for a user.
+   *
+   * @param req - The request object.
+   * @param query - The query parameters.
+   * @returns A Promise that resolves to the user's permissions.
+   * @author Jonathan Alvarado
+   */
+  async findUserPermissions(
+    @Req() req: any,
+    @Query() query: QueryUserPermissionDto
+  ) {
+    const userId = query.id || req.user.id;
+
+    return this.permissionsService.findUserPermissions(userId);
   }
 
   @ApiOperation({

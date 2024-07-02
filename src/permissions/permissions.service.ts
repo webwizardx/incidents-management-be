@@ -2,15 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
 import { PaginatedResponseDto } from 'src/dto/paginated-response.dto';
+import { User } from 'src/users/models/user.model';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { PatchPermissionDto } from './dto/patch-permission.dto';
 import { QueryPermissionDto } from './dto/query-permission.dto';
 import { Permission } from './models/permission.model';
+import { Role } from './models/role.model';
 
 @Injectable()
 export class PermissionsService {
   constructor(
-    @InjectModel(Permission) private readonly permission: typeof Permission
+    @InjectModel(Permission) private readonly permission: typeof Permission,
+    @InjectModel(User) private readonly user: typeof User
   ) {}
 
   /**
@@ -67,6 +70,29 @@ export class PermissionsService {
    */
   async findOne(query: FindOptions<Permission>) {
     return await this.permission.findOne(query);
+  }
+
+  /**
+   * Retrieves the permissions of a user based on their user ID.
+   * @param userId - The ID of the user.
+   * @returns An array of user permissions, containing the action, ID, and subject of each permission.
+   * @author Jonathan Alvarado
+   */
+  async findUserPermissions(userId: number) {
+    const user = await this.user.findByPk(userId, {
+      include: [
+        {
+          model: Role,
+          include: [Permission],
+        },
+      ],
+    });
+
+    return user?.role?.permissions?.map((permission) => ({
+      action: permission.action,
+      id: permission.id,
+      subject: permission.subject,
+    }));
   }
 
   /**

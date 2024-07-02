@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Includeable } from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -60,4 +60,8 @@ export class User extends Model {
 
   @BelongsTo(() => Role)
   role: Role;
+
+  static getIncludes(includes: string[] = []): Includeable | Includeable[] {
+    return includes.map((include) => this.associations[include]);
+  }
 }

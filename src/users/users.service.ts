@@ -40,8 +40,9 @@ export class UsersService {
    * @author Jonathan Alvarado
    */
   async find(query: QueryUserDto) {
-    const { limit, order, orderBy, page, ...where } = query;
+    const { include, limit, order, orderBy, page, ...where } = query;
     const { count: totalCount, rows: data } = await this.user.findAndCountAll({
+      include: this.user.getIncludes(include),
       limit,
       order: [[orderBy, order]],
       offset: (page - 1) * limit,

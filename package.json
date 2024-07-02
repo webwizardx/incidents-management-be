@@ -12,6 +12,7 @@
     "migrate:up": "npx sequelize-cli db:migrate --env local",
     "migrate:undo": "npx sequelize-cli db:migrate:undo --env local",
     "migrate:undo:all": "npx sequelize-cli db:migrate:undo:all --env local",
+    "migrate:refresh": "npm run migrate:undo:all && npm run migrate:up && npm run seed",
     "prepare": "husky install",
     "seed": "npx sequelize-cli db:seed:all --env local",
     "start:debug": "nest start --debug --watch",

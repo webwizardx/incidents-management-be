@@ -23,6 +23,11 @@ module.exports = {
       {
         action: 'read',
         roles: [2, 3],
+        subject: 'roles',
+      },
+      {
+        action: 'read',
+        roles: [2, 3],
         subject: 'users',
       },
       {
