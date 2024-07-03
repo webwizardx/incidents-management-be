@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -10,6 +11,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CheckPolicies } from 'src/permissions/decorators/check-policies.decorator';
@@ -153,7 +155,11 @@ export class UsersController {
    * @throws NotFoundException if the user with the specified ID is not found.
    * @author Jonathan Alvarado
    */
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
+    if (req?.user?.id === id) {
+      throw new BadRequestException(`You can't delete your own user`);
+    }
+
     const user = await this.usersService.findOne({ where: { id } });
 
     if (!user) {

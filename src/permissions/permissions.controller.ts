@@ -145,8 +145,9 @@ export class PermissionsController {
 
   @ApiOperation({
     description:
-      'This endpoint is used to get a list of permissions for a user',
-    summary: 'Get a list of permissions for a user',
+      'This endpoint is used to get a list of permissions for a user. We can pass the user id to get the permissions for that user. If no id is passed, the permissions for the current user will be returned.',
+    summary:
+      'Get a list of permissions for a user. If no id is passed, the permissions for the current user will be returned.',
   })
   @CheckPolicies(new ReadPermissionPolicyHandler())
   @Get('/users')

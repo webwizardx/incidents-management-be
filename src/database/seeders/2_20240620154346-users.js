@@ -26,7 +26,7 @@ module.exports = {
       },
     ];
 
-    for (let i = 0; i < 30; ++i) {
+    for (let i = 0; i < 100; ++i) {
       const first_name = faker.person.firstName().split(' ')[0];
       const last_name = faker.person.lastName().split(' ')[0];
       users.push({
