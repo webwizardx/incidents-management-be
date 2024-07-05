@@ -3,9 +3,11 @@ import {
   BelongsTo,
   Column,
   ForeignKey,
+  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript';
+import { Comment } from 'src/modules/incidents/models/comment.model';
 import { Role } from 'src/modules/permissions/models/role.model';
 
 @Table({
@@ -60,6 +62,9 @@ export class User extends Model {
 
   @BelongsTo(() => Role)
   role: Role;
+
+  @HasMany(() => Comment, 'user_id')
+  comments: Comment[];
 
   static getIncludes(includes: string[] = []): Includeable | Includeable[] {
     return includes.map((include) => this.associations[include]);
