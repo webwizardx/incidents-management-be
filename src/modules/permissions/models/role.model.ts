@@ -6,7 +6,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { User } from 'src/users/models/user.model';
+import { User } from 'src/modules/users/models/user.model';
 import { Permission } from './permission.model';
 import { RoleHasPermission } from './role-has-permission.model';
 

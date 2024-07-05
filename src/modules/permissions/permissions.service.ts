@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
 import { PaginatedResponseDto } from 'src/dto/paginated-response.dto';
-import { User } from 'src/users/models/user.model';
+import { User } from 'src/modules/users/models/user.model';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { PatchPermissionDto } from './dto/patch-permission.dto';
 import { QueryPermissionDto } from './dto/query-permission.dto';

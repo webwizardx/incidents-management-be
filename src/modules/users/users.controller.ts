@@ -14,7 +14,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CheckPolicies } from 'src/permissions/decorators/check-policies.decorator';
+import { CheckPolicies } from 'src/modules/permissions/decorators/check-policies.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PatchUserDto } from './dto/patch-user.dto';
 import { QueryUserDto } from './dto/query-user.dto';

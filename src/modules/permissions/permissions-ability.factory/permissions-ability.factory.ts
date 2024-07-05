@@ -6,7 +6,7 @@ import {
   PureAbility,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/users/models/user.model';
+import { User } from 'src/modules/users/models/user.model';
 import { Action } from '../enum';
 
 type Subjects = InferSubjects<typeof User> | string;

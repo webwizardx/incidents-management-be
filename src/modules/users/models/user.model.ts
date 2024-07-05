@@ -6,7 +6,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Role } from 'src/permissions/models/role.model';
+import { Role } from 'src/modules/permissions/models/role.model';
 
 @Table({
   defaultScope: {

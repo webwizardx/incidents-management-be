@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { User } from 'src/users/models/user.model';
-import { UsersModule } from 'src/users/users.module';
+import { User } from 'src/modules/users/models/user.model';
+import { UsersModule } from 'src/modules/users/users.module';
 import { Permission } from './models/permission.model';
 import { RoleHasPermission } from './models/role-has-permission.model';
 import { Role } from './models/role.model';

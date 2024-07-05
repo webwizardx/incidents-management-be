@@ -13,7 +13,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/modules/users/users.service';
 import { CheckPolicies } from './decorators/check-policies.decorator';
 import { CheckUserPermissionDto } from './dto/check-user-permission.dto';
 import { CreatePermissionDto } from './dto/create-permission.dto';

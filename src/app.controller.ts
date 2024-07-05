@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { NO_AUTH } from './auth/guards/no-auth.decorator';
+import { NO_AUTH } from './modules/auth/guards/no-auth.decorator';
 
 @ApiBearerAuth('BearerJWT')
 @ApiTags('Default')

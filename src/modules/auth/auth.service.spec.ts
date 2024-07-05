@@ -1,7 +1,7 @@
 import { TestBed } from '@automock/jest';
 import { UnauthorizedException } from '@nestjs/common';
 import { isMatch } from 'src/helpers/hash';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/modules/users/users.service';
 import { AuthService } from './auth.service';
 
 jest.mock('src/helpers/hash', () => ({

@@ -10,9 +10,9 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { Request } from 'express';
 import { Config } from 'src/config/configuration';
-import { Permission } from 'src/permissions/models/permission.model';
-import { Role } from 'src/permissions/models/role.model';
-import { User } from 'src/users/models/user.model';
+import { Permission } from 'src/modules/permissions/models/permission.model';
+import { Role } from 'src/modules/permissions/models/role.model';
+import { User } from 'src/modules/users/models/user.model';
 import { NO_AUTH_KEY } from './no-auth.decorator';
 
 @Injectable()

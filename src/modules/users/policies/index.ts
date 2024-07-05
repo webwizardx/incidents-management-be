@@ -1,6 +1,6 @@
-import { Action } from 'src/permissions/enum';
-import { IPolicyHandler } from 'src/permissions/handlers/policies.handler';
-import { AppAbility } from 'src/permissions/permissions-ability.factory/permissions-ability.factory';
+import { Action } from 'src/modules/permissions/enum';
+import { IPolicyHandler } from 'src/modules/permissions/handlers/policies.handler';
+import { AppAbility } from 'src/modules/permissions/permissions-ability.factory/permissions-ability.factory';
 import { User } from '../models/user.model';
 
 export class CreateUserPolicyHandler implements IPolicyHandler {
