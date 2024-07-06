@@ -38,6 +38,7 @@ export class Incident extends Model {
   category: Category;
 
   @Column({
+    allowNull: true,
     type: DataTypes.DATE,
   })
   closedAt?: string;

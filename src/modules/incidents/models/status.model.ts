@@ -3,8 +3,8 @@ import { Column, HasOne, Model, Table } from 'sequelize-typescript';
 import { User } from 'src/modules/users/models/user.model';
 
 @Table({
-  paranoid: true,
   tableName: 'status',
+  timestamps: false,
   underscored: true,
 })
 export class Status extends Model {

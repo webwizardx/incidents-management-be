@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const { fakerES: faker } = require('@faker-js/faker');
 
 /** @type {import('sequelize-cli').Migration} */
+/** @type {import('@faker-js/faker').Faker} */
 module.exports = {
   async up(queryInterface) {
     const [{ count }] = await queryInterface.sequelize.query(
