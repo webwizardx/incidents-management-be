@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { API_BEARER_AUTH } from './constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,7 +14,7 @@ async function bootstrap() {
   app.setGlobalPrefix('/api');
 
   const config = new DocumentBuilder()
-    .addBearerAuth(undefined, 'BearerJWT')
+    .addBearerAuth(undefined, API_BEARER_AUTH)
     .setTitle('NestJS template')
     .setDescription('API Docs for NestJS template')
     .setVersion('1.0')

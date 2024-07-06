@@ -12,6 +12,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { API_BEARER_AUTH } from 'src/constants';
 import { CheckPolicies } from './decorators/check-policies.decorator';
 import { CreateRoleHasPermissionDto } from './dto/create-role-has-permission.dto';
 import { CreateRoleDto } from './dto/create-role.dto';
@@ -31,7 +32,7 @@ import {
 } from './policies/roles';
 import { RolesService } from './roles.service';
 
-@ApiBearerAuth('BearerJWT')
+@ApiBearerAuth(API_BEARER_AUTH)
 @ApiTags('Roles')
 @Controller('roles')
 export class RolesController {

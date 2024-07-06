@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { Column, HasOne, Model, Table } from 'sequelize-typescript';
-import { User } from 'src/modules/users/models/user.model';
+import { Incident } from 'src/modules/incidents/models/incident.model';
 
 @Table({
   tableName: 'status',
@@ -26,6 +26,6 @@ export class Status extends Model {
   })
   name: string;
 
-  @HasOne(() => User, 'status_id')
-  user: User;
+  @HasOne(() => Incident, 'status_id')
+  incident: Incident;
 }

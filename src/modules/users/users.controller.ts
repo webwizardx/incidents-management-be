@@ -14,6 +14,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { API_BEARER_AUTH } from 'src/constants';
 import { CheckPolicies } from 'src/modules/permissions/decorators/check-policies.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PatchUserDto } from './dto/patch-user.dto';
@@ -26,7 +27,7 @@ import {
 } from './policies';
 import { UsersService } from './users.service';
 
-@ApiBearerAuth('BearerJWT')
+@ApiBearerAuth(API_BEARER_AUTH)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {

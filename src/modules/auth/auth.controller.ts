@@ -1,10 +1,11 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { API_BEARER_AUTH } from 'src/constants';
 import { AuthService } from './auth.service';
 import { SignInDTO } from './dto/signin.dto';
 import { NO_AUTH } from './guards/no-auth.decorator';
 
-@ApiBearerAuth('BearerJWT')
+@ApiBearerAuth(API_BEARER_AUTH)
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {

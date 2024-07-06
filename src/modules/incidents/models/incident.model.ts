@@ -8,9 +8,9 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { User } from 'src/modules/users/models/user.model';
+import { Status } from '../modules/status/models/status.model';
 import { Category } from './category.model';
 import { Comment } from './comment.model';
-import { Status } from './status.model';
 
 @Table({
   paranoid: true,

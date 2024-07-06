@@ -13,6 +13,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { API_BEARER_AUTH } from 'src/constants';
 import { UsersService } from 'src/modules/users/users.service';
 import { CheckPolicies } from './decorators/check-policies.decorator';
 import { CheckUserPermissionDto } from './dto/check-user-permission.dto';
@@ -30,7 +31,7 @@ import {
   ReadPermissionPolicyHandler,
   UpdatePermissionPolicyHandler,
 } from './policies/permissions';
-@ApiBearerAuth('BearerJWT')
+@ApiBearerAuth(API_BEARER_AUTH)
 @ApiTags('Permissions')
 @Controller('permissions')
 export class PermissionsController {
