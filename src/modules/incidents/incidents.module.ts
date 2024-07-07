@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { IncidentsController } from './incidents.controller';
 import { IncidentsService } from './incidents.service';
-import { Category } from './models/category.model';
 import { Comment } from './models/comment.model';
 import { Incident } from './models/incident.model';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { Category } from './modules/categories/models/category.model';
 import { Status } from './modules/status/models/status.model';
 import { StatusModule } from './modules/status/status.module';
 
@@ -12,6 +13,7 @@ import { StatusModule } from './modules/status/status.module';
   imports: [
     SequelizeModule.forFeature([Category, Comment, Incident, Status]),
     StatusModule,
+    CategoriesModule,
   ],
   controllers: [IncidentsController],
   providers: [IncidentsService],

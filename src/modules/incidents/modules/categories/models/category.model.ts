@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { Column, HasOne, Model, Table } from 'sequelize-typescript';
-import { Incident } from './incident.model';
+import { Incident } from 'src/modules/incidents/models/incident.model';
 
 @Table({
   tableName: 'categories',
