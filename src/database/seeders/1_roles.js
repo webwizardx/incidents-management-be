@@ -12,7 +12,7 @@ module.exports = {
       return;
     }
 
-    const roles = ['admin', 'technician', 'user'];
+    const roles = ['ADMIN', 'TECHNICIAN', 'USER'];
 
     const records = [];
 

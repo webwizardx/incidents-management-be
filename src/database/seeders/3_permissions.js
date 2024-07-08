@@ -19,11 +19,11 @@ module.exports = {
       },
       {
         action: 'read',
-        subject: 'roles',
+        subject: 'all',
       },
       {
-        action: 'read',
-        subject: 'users',
+        action: 'update',
+        subject: 'incidents',
       },
       {
         action: 'update',

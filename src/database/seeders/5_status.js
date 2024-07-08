@@ -12,7 +12,7 @@ module.exports = {
       return;
     }
 
-    const status = ['open', 'progress', 'closed'];
+    const status = ['OPEN', 'IN_PROGRESS', 'CLOSED'];
 
     const records = [];
 

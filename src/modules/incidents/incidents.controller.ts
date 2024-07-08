@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -10,6 +11,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { API_BEARER_AUTH } from 'src/constants';
@@ -87,6 +89,43 @@ export class IncidentsController {
   }
 
   @ApiOperation({
+    description: 'This endpoint is used to auto assign an incident to a user',
+    summary: 'Auto assign an incident to a user',
+  })
+  @CheckPolicies(new UpdateIncidentPolicyHandler())
+  @Patch(':id/auto-assign')
+  /**
+   * Assigns an incident to a user automatically.
+   *
+   * @param id - The ID of the incident to be assigned.
+   * @returns The user to whom the incident is assigned.
+   * @throws NotFoundException if the incident with the given ID is not found or if no user is available to assign the incident.
+   * @throws BadRequestException if the incident with the given ID is already assigned.
+   * @author Jonathan Alvarado
+   */
+  async autoAssignIncidentToUser(@Param('id', ParseIntPipe) id: number) {
+    const incident = await this.incidentsService.findOne({ where: { id } });
+
+    if (!incident) {
+      throw new NotFoundException(`Incident with id ${id} not found`);
+    } else if (incident.assignedTo) {
+      throw new BadRequestException(
+        `Incident with id ${id} is already assigned`
+      );
+    }
+
+    const user = await this.incidentsService.autoAssignIncidentToUser(id);
+
+    if (!user) {
+      throw new NotFoundException(
+        `No user available to assign incident with id ${id}`
+      );
+    }
+
+    return user;
+  }
+
+  @ApiOperation({
     description: 'This endpoint is used to update an incident',
     summary: 'Update an incident',
   })
@@ -148,18 +187,24 @@ export class IncidentsController {
   @CheckPolicies(new DeleteIncidentPolicyHandler())
   @Delete(':id')
   /**
-   * Deletes an incident by its ID.
+   * Deletes an incident with the specified ID.
    *
+   * @param req - The request object.
    * @param id - The ID of the incident to delete.
    * @returns A Promise that resolves to the deleted incident.
    * @throws NotFoundException if the incident with the specified ID is not found.
+   * @throws BadRequestException if the user does not own the incident.
    * @author Jonathan Alvarado
    */
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
     const incident = await this.incidentsService.findOne({ where: { id } });
 
     if (!incident) {
       throw new NotFoundException(`Incident with id ${id} not found`);
+    } else if (req?.user?.id !== incident.ownerId) {
+      throw new BadRequestException(
+        `You can't delete an incident you don't own`
+      );
     }
 
     return this.incidentsService.delete(id);

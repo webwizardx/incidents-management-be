@@ -43,7 +43,7 @@ module.exports = {
         first_name,
         last_name,
         password: await bcrypt.hash('password', 10),
-        role_id: 3,
+        role_id: i & 1 ? 2 : 3,
       });
     }
 

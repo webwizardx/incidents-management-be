@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { FindOptions } from 'sequelize';
+import sequelize, { FindOptions, Op } from 'sequelize';
 import { PaginatedResponseDto } from 'src/dto/paginated-response.dto';
+import { Order } from 'src/enum/order-by.enum';
 import { Incident } from 'src/modules/incidents/models/incident.model';
+import { User } from '../users/models/user.model';
 import { CreateIncidentDto } from './dto/create-incident.dto';
 import { PatchIncidentDto } from './dto/patch-incident.dto';
 import { QueryIncidentDto } from './dto/query-incident.dto';
@@ -10,8 +12,35 @@ import { QueryIncidentDto } from './dto/query-incident.dto';
 @Injectable()
 export class IncidentsService {
   constructor(
-    @InjectModel(Incident) private readonly incident: typeof Incident
+    @InjectModel(Incident) private readonly incident: typeof Incident,
+    @InjectModel(User) private readonly user: typeof User
   ) {}
+
+  /**
+   * Automatically assigns an incident to the user with the lowest amount of incidents assigned to them.
+   * @param id - The ID of the incident to assign.
+   * @returns A promise that resolves to the assigned incident.
+   */
+  async autoAssignIncidentToUser(id: number) {
+    let user = await this.getUserWithNoIncidentsAssigned();
+
+    if (!user) {
+      user = await this.getUserWithLowerAmountOfIncidentsAssigned();
+    }
+
+    if (!user) {
+      return null;
+    }
+
+    await this.incident.update({ assigned_to: user.id }, { where: { id } });
+
+    return await this.user.findByPk(user.id, {
+      include: {
+        as: 'incidentsAssigned',
+        model: Incident,
+      },
+    });
+  }
 
   /**
    * Creates a new incident.
@@ -89,5 +118,62 @@ export class IncidentsService {
    */
   async update(id: number, body: Omit<CreateIncidentDto, 'number'>) {
     return await this.incident.update(body, { where: { id } });
+  }
+
+  /**
+   * Retrieves the first user with no incidents assigned.
+   *
+   * @returns The user with no incidents assigned, or undefined if no such user exists.
+   * @author Jonathan Alvarado
+   */
+  private async getUserWithNoIncidentsAssigned() {
+    const users = await this.user.findAll({
+      include: {
+        as: 'incidentsAssigned',
+        model: Incident,
+      },
+      order: [['created_at', Order.ASC]],
+      where: {
+        roleId: 2,
+        '$incidentsAssigned.assigned_to$': {
+          [Op.eq]: null,
+        },
+      },
+    });
+
+    return users?.[0];
+  }
+
+  /**
+   * Retrieves the user with the lowest amount of incidents assigned.
+   *
+   * @returns The user with the lowest amount of incidents assigned.
+   * @author Jonathan Alvarado
+   */
+  private async getUserWithLowerAmountOfIncidentsAssigned() {
+    const users = await this.user.findAll({
+      attributes: {
+        include: [
+          [
+            sequelize.fn(
+              'count',
+              sequelize.col('incidentsAssigned.assigned_to')
+            ),
+            'incidentCount',
+          ],
+        ],
+      },
+      include: {
+        as: 'incidentsAssigned',
+        model: Incident,
+        required: true,
+      },
+      group: ['incidentsAssigned.assigned_to'],
+      order: [['incidentCount', Order.ASC]],
+      where: {
+        roleId: 2,
+      },
+    });
+    return users?.[0];
   }
 }

@@ -23,12 +23,12 @@ module.exports = {
       {
         action: 'read',
         roles: [2, 3],
-        subject: 'roles',
+        subject: 'all',
       },
       {
-        action: 'read',
+        action: 'update',
         roles: [2, 3],
-        subject: 'users',
+        subject: 'incidents',
       },
       {
         action: 'update',

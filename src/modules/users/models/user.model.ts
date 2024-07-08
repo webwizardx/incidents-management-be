@@ -8,6 +8,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Comment } from 'src/modules/incidents/models/comment.model';
+import { Incident } from 'src/modules/incidents/models/incident.model';
 import { Role } from 'src/modules/permissions/models/role.model';
 
 @Table({
@@ -43,6 +44,18 @@ export class User extends Model {
     type: DataTypes.TEXT,
   })
   firstName: string;
+
+  @HasMany(() => Incident, {
+    foreignKey: 'assigned_to',
+    as: 'incidentsAssigned',
+  })
+  incidentsAssigned: Incident[];
+
+  @HasMany(() => Incident, {
+    foreignKey: 'owner_id',
+    as: 'incidentsOwned',
+  })
+  incidentsOwned: Incident[];
 
   @Column({
     type: DataTypes.TEXT,

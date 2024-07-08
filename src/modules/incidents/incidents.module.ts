@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { User } from '../users/models/user.model';
 import { IncidentsController } from './incidents.controller';
 import { IncidentsService } from './incidents.service';
 import { Comment } from './models/comment.model';
@@ -11,7 +12,7 @@ import { StatusModule } from './modules/status/status.module';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Category, Comment, Incident, Status]),
+    SequelizeModule.forFeature([Category, Comment, Incident, Status, User]),
     StatusModule,
     CategoriesModule,
   ],
