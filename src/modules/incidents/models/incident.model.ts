@@ -25,7 +25,10 @@ export class Incident extends Model {
   @ForeignKey(() => User)
   assignedTo?: number;
 
-  @BelongsTo(() => User, 'assigned_to')
+  @BelongsTo(() => User, {
+    as: 'assignee',
+    foreignKey: 'assigned_to',
+  })
   assignee?: User;
 
   @Column({
@@ -59,7 +62,10 @@ export class Incident extends Model {
   @ForeignKey(() => User)
   ownerId: number;
 
-  @BelongsTo(() => User, 'owner_id')
+  @BelongsTo(() => User, {
+    as: 'owner',
+    foreignKey: 'owner_id',
+  })
   owner: User;
 
   @Column({

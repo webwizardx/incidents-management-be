@@ -1,4 +1,4 @@
-import { DataTypes, Includeable } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import {
   BelongsTo,
   Column,
@@ -46,14 +46,14 @@ export class User extends Model {
   firstName: string;
 
   @HasMany(() => Incident, {
-    foreignKey: 'assigned_to',
     as: 'incidentsAssigned',
+    foreignKey: 'assigned_to',
   })
   incidentsAssigned: Incident[];
 
   @HasMany(() => Incident, {
-    foreignKey: 'owner_id',
     as: 'incidentsOwned',
+    foreignKey: 'owner_id',
   })
   incidentsOwned: Incident[];
 
@@ -78,8 +78,4 @@ export class User extends Model {
 
   @HasMany(() => Comment, 'user_id')
   comments: Comment[];
-
-  static getIncludes(includes: string[] = []): Includeable | Includeable[] {
-    return includes.map((include) => this.associations[include]);
-  }
 }

@@ -69,9 +69,10 @@ export class IncidentsService {
    * @author Jonathan Alvarado
    */
   async find(query: QueryIncidentDto) {
-    const { limit, order, orderBy, page, ...where } = query;
+    const { include, limit, order, orderBy, page, ...where } = query;
     const { count: totalCount, rows: data } =
       await this.incident.findAndCountAll({
+        include,
         limit,
         order: [[orderBy, order]],
         offset: (page - 1) * limit,
