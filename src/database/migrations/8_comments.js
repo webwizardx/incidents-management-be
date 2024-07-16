@@ -4,6 +4,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.createTable('comments', {
+      content: Sequelize.TEXT,
       createdAt: {
         defaultValue: new Date(),
         field: 'created_at',
@@ -14,7 +15,6 @@ module.exports = {
         field: 'deleted_at',
         type: Sequelize.DATE,
       },
-      description: Sequelize.TEXT,
       id: {
         autoIncrement: true,
         primaryKey: true,

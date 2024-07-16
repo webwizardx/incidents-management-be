@@ -7,8 +7,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Comment } from 'src/modules/incidents/models/comment.model';
 import { Incident } from 'src/modules/incidents/models/incident.model';
+import { Comment } from 'src/modules/incidents/modules/comments/models/comment.model';
 import { Role } from 'src/modules/permissions/models/role.model';
 
 @Table({

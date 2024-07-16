@@ -15,7 +15,7 @@ module.exports = {
       const incident = incidents[i];
       for (let j = 1; j < 3; ++j) {
         records.push({
-          description: faker.lorem.paragraph(),
+          content: faker.lorem.paragraph(),
           incident_id: incident.id,
           user_id: j,
         });

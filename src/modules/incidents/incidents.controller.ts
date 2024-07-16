@@ -126,7 +126,7 @@ export class IncidentsController {
   }
 
   @ApiOperation({
-    description: 'This endpoint is used to update an incident',
+    description: 'This endpoint is used to partially update an incident',
     summary: 'Update an incident',
   })
   @CheckPolicies(new UpdateIncidentPolicyHandler())

@@ -88,7 +88,7 @@ export class CategoriesController {
   }
 
   @ApiOperation({
-    description: 'This endpoint is used to update a category',
+    description: 'This endpoint is used to partially update a category',
     summary: 'Update a category',
   })
   @CheckPolicies(new UpdateCategoryPolicyHandler())

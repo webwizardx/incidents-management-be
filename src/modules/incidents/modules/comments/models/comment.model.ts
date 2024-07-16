@@ -6,8 +6,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { Incident } from 'src/modules/incidents/models/incident.model';
 import { User } from 'src/modules/users/models/user.model';
-import { Incident } from './incident.model';
 
 @Table({
   paranoid: true,
@@ -18,7 +18,7 @@ export class Comment extends Model {
   @Column({
     type: DataTypes.TEXT,
   })
-  description: string;
+  content: string;
 
   @Column({
     autoIncrement: true,

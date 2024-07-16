@@ -87,7 +87,7 @@ export class StatusController {
   }
 
   @ApiOperation({
-    description: 'This endpoint is used to update a status',
+    description: 'This endpoint is used to partially update a status',
     summary: 'Update a status',
   })
   @CheckPolicies(new UpdateStatusPolicyHandler())

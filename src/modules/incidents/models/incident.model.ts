@@ -9,8 +9,8 @@ import {
 } from 'sequelize-typescript';
 import { User } from 'src/modules/users/models/user.model';
 import { Category } from '../modules/categories/models/category.model';
+import { Comment } from '../modules/comments/models/comment.model';
 import { Status } from '../modules/status/models/status.model';
-import { Comment } from './comment.model';
 
 @Table({
   paranoid: true,
