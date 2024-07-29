@@ -22,6 +22,18 @@ module.exports = {
         subject: 'all',
       },
       {
+        action: 'create',
+        subject: 'comments',
+      },
+      {
+        action: 'update',
+        subject: 'comments',
+      },
+      {
+        action: 'create',
+        subject: 'incidents',
+      },
+      {
         action: 'update',
         subject: 'incidents',
       },

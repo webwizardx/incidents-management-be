@@ -7,6 +7,7 @@ import { CommentsService } from './comments.service';
 import { Comment } from './models/comment.model';
 
 @Module({
+  exports: [CommentsService],
   imports: [SequelizeModule.forFeature([Comment, Incident, User])],
   providers: [CommentsService],
   controllers: [CommentsController],

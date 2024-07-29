@@ -8,10 +8,13 @@ import { User } from '../users/models/user.model';
 import { CreateIncidentDto } from './dto/create-incident.dto';
 import { PatchIncidentDto } from './dto/patch-incident.dto';
 import { QueryIncidentDto } from './dto/query-incident.dto';
+import { CommentsService } from './modules/comments/comments.service';
+import { CreateCommentDto } from './modules/comments/dto/create-comment.dto';
 
 @Injectable()
 export class IncidentsService {
   constructor(
+    private commentsService: CommentsService,
     @InjectModel(Incident) private readonly incident: typeof Incident,
     @InjectModel(User) private readonly user: typeof User
   ) {}
@@ -49,7 +52,15 @@ export class IncidentsService {
    * @author Jonathan Alvarado
    */
   async create(body: Omit<CreateIncidentDto, 'number'>) {
-    return await this.incident.create(body);
+    const { comment: content, ...payload } = body;
+    const incident = await this.incident.create(payload);
+    const commentPayload: CreateCommentDto = {
+      content,
+      incidentId: incident.id,
+      userId: incident.ownerId,
+    };
+    await this.commentsService.create(commentPayload);
+    return incident;
   }
 
   /**
@@ -72,7 +83,13 @@ export class IncidentsService {
     const { include, limit, order, orderBy, page, ...where } = query;
     const { count: totalCount, rows: data } =
       await this.incident.findAndCountAll({
-        include,
+        include:
+          include?.[0] === 'all'
+            ? {
+                all: true,
+                nested: true,
+              }
+            : include,
         limit,
         order: [[orderBy, order]],
         offset: (page - 1) * limit,

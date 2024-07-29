@@ -19,11 +19,27 @@ module.exports = {
     const users = [
       {
         created_at: new Date(),
-        email: 'john@doe.com',
+        email: 'admin@mercantilseguros.com',
         first_name: 'Jonathan',
-        last_name: 'Alvarado',
+        last_name: 'Admin',
         password: await bcrypt.hash('password', 10),
         role_id: 1,
+      },
+      {
+        created_at: new Date(),
+        email: 'tecnico@mercantilseguros.com',
+        first_name: 'Jonathan',
+        last_name: 'Tecnico',
+        password: await bcrypt.hash('password', 10),
+        role_id: 2,
+      },
+      {
+        created_at: new Date(),
+        email: 'usuario@mercantilseguros.com',
+        first_name: 'Jonathan',
+        last_name: 'Usuario',
+        password: await bcrypt.hash('password', 10),
+        role_id: 3,
       },
     ];
 

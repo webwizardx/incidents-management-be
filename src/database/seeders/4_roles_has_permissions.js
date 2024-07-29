@@ -26,6 +26,21 @@ module.exports = {
         subject: 'all',
       },
       {
+        action: 'create',
+        roles: [2, 3],
+        subject: 'comments',
+      },
+      {
+        action: 'update',
+        roles: [2, 3],
+        subject: 'comments',
+      },
+      {
+        action: 'create',
+        roles: [2, 3],
+        subject: 'incidents',
+      },
+      {
         action: 'update',
         roles: [2, 3],
         subject: 'incidents',

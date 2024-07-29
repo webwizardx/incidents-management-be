@@ -28,6 +28,14 @@ export class CreateIncidentDto {
   @IsOptional()
   closedAt?: Date;
 
+  @ApiPropertyOptional({
+    description: 'The comment of the incident',
+    example: 'This is a comment',
+  })
+  @IsOptional()
+  @IsString()
+  comment?: string;
+
   @ApiProperty({
     description: 'The id of the user who created the incident',
     example: 1,
