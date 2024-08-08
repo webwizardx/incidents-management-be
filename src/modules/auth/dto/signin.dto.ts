@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class SignInDTO {
   @ApiProperty({
-    example: 'john@doe.com',
+    example: 'admin@mercantilseguros.com',
     description: 'The email of the user',
   })
   @IsEmail()

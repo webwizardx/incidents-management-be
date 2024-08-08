@@ -10,6 +10,7 @@ import { PatchIncidentDto } from './dto/patch-incident.dto';
 import { QueryIncidentDto } from './dto/query-incident.dto';
 import { CommentsService } from './modules/comments/comments.service';
 import { CreateCommentDto } from './modules/comments/dto/create-comment.dto';
+import { STATUS } from './modules/status/enum';
 
 @Injectable()
 export class IncidentsService {
@@ -60,6 +61,9 @@ export class IncidentsService {
       userId: incident.ownerId,
     };
     await this.commentsService.create(commentPayload);
+
+    await this.autoAssignIncidentToUser(incident.id);
+
     return incident;
   }
 
@@ -114,6 +118,72 @@ export class IncidentsService {
    */
   async findOne(query: FindOptions<Incident>) {
     return await this.incident.findOne(query);
+  }
+
+  async getIncidentsStatusCountForChart() {
+    const statusCounts = await this.incident.findAll({
+      attributes: [
+        'statusId',
+        [sequelize.fn('count', sequelize.col('status_id')), 'incidentsCount'],
+      ],
+      group: ['status_id'],
+    });
+
+    const statusIdMap = {
+      1: STATUS.OPEN,
+      2: STATUS.IN_PROGRESS,
+      3: STATUS.CLOSED,
+    };
+    const i18n = {
+      [STATUS.CLOSED]: 'Cerrado',
+      [STATUS.IN_PROGRESS]: 'En Progreso',
+      [STATUS.OPEN]: 'Abierto',
+    };
+
+    return statusCounts.reduce(
+      (obj, result: any) => {
+        const status = statusIdMap[result.statusId];
+        obj[status] = {
+          label: i18n[status],
+          data: [
+            {
+              label: i18n[status],
+              data: result.toJSON().incidentsCount,
+            },
+          ],
+        };
+        return obj;
+      },
+      {
+        [STATUS.CLOSED]: {
+          label: i18n[STATUS.CLOSED],
+          data: [
+            {
+              label: i18n[STATUS.CLOSED],
+              data: 1,
+            },
+          ],
+        },
+        [STATUS.IN_PROGRESS]: {
+          label: i18n[STATUS.IN_PROGRESS],
+          data: [
+            {
+              label: i18n[STATUS.IN_PROGRESS],
+              data: 5,
+            },
+          ],
+        },
+        [STATUS.OPEN]: {
+          label: i18n[STATUS.OPEN],
+          data: [
+            {
+              label: i18n[STATUS.OPEN],
+              data: 50,
+            },
+          ],
+        },
+      }
+    );
   }
 
   /**

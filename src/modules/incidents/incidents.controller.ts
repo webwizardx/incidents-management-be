@@ -66,6 +66,17 @@ export class IncidentsController {
   }
 
   @ApiOperation({
+    description:
+      'This endpoint is used to get the count of incidents by status',
+    summary: 'Get the count of incidents by status',
+  })
+  @CheckPolicies(new ReadIncidentPolicyHandler())
+  @Get('status-count-for-chart')
+  async getIncidentsStatusCountForChart() {
+    return this.incidentsService.getIncidentsStatusCountForChart();
+  }
+
+  @ApiOperation({
     description: 'This endpoint is used to get an incident by id',
     summary: 'Get an incident by id',
   })
