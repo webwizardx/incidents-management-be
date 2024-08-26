@@ -23,11 +23,14 @@ import { UsersModule } from './modules/users/users.module';
         const databaseConfig = await import('./config/database.config.json');
         const env = configService.get('env');
         const isTEST = /test/i.test(env);
+        const isLocal = /local/i.test(env);
         if (isTEST) {
           return databaseConfig['test'] as SequelizeModuleOptions;
+        } else if (isLocal) {
+          return databaseConfig['local'] as SequelizeModuleOptions;
+        } else {
+          return databaseConfig['dev'] as SequelizeModuleOptions;
         }
-
-        return databaseConfig['local'] as SequelizeModuleOptions;
       },
     }),
     UsersModule,

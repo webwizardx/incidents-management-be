@@ -1,4 +1,17 @@
 {
+  "dev": {
+    "autoLoadModels": true,
+    "database": "incidents_management",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": true,
+      "native": true
+    },
+    "uri": "postgresql://incidents_management_user:0kOkPXENVcAcYJOqc0IWDKPa96rt60Bl@dpg-cr6dna3v2p9s738t4k00-a.oregon-postgres.render.com/incidents_management",
+    "password": "0kOkPXENVcAcYJOqc0IWDKPa96rt60Bl",
+    "synchronize": true,
+    "username": "incidents_management_user"
+  },
   "local": {
     "autoLoadModels": true,
     "dialect": "sqlite",
