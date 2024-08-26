@@ -16,6 +16,7 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { API_BEARER_AUTH } from 'src/constants';
 import { CheckPolicies } from '../permissions/decorators/check-policies.decorator';
+import { ReadUserPolicyHandler } from '../users/policies';
 import { CreateIncidentDto } from './dto/create-incident.dto';
 import { PatchIncidentDto } from './dto/patch-incident.dto';
 import { QueryIncidentDto } from './dto/query-incident.dto';
@@ -63,6 +64,17 @@ export class IncidentsController {
    */
   async find(@Query() query: QueryIncidentDto) {
     return this.incidentsService.find(query);
+  }
+
+  @ApiOperation({
+    description:
+      'This endpoint is used to get the count of incidents assigned to a user',
+    summary: 'Get the count of incidents assigned to a user',
+  })
+  @CheckPolicies(new ReadIncidentPolicyHandler(), new ReadUserPolicyHandler())
+  @Get('assigned-incidents-count-for-chart')
+  async getAssignedTicketsCountForChart() {
+    return this.incidentsService.getAssignedIncidentsCountForChart();
   }
 
   @ApiOperation({

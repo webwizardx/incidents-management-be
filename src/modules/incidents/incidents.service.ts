@@ -11,6 +11,7 @@ import { QueryIncidentDto } from './dto/query-incident.dto';
 import { CommentsService } from './modules/comments/comments.service';
 import { CreateCommentDto } from './modules/comments/dto/create-comment.dto';
 import { STATUS } from './modules/status/enum';
+import { ChartDataMap } from './types';
 
 @Injectable()
 export class IncidentsService {
@@ -120,6 +121,61 @@ export class IncidentsService {
     return await this.incident.findOne(query);
   }
 
+  /**
+   * Retrieves the count of assigned tickets for chart representation.
+   *
+   * @returns An object containing the count of assigned tickets for each user.
+   *
+   * @author Your Name
+   */
+  async getAssignedIncidentsCountForChart() {
+    const assignedTicketsCount = await this.user.findAll({
+      attributes: [
+        'id',
+        'firstName',
+        'lastName',
+        [
+          sequelize.fn('count', sequelize.col('incidentsAssigned.id')),
+          'assignedTicketsCount',
+        ],
+      ],
+      include: {
+        as: 'incidentsAssigned',
+        model: Incident,
+      },
+      group: ['user.id'],
+      order: [[sequelize.col('assignedTicketsCount'), Order.DESC]],
+      subQuery: false,
+      limit: 15,
+    });
+
+    const assignedTicketsCountMap = assignedTicketsCount.reduce<ChartDataMap>(
+      (map, result: any) => {
+        const assignedTicketsCount = result.toJSON().assignedTicketsCount;
+        const fullName = `${result?.firstName}  ${result?.lastName}`;
+        map[fullName] = {
+          label: fullName,
+          data: [
+            {
+              label: fullName,
+              data: assignedTicketsCount,
+            },
+          ],
+        };
+        return map;
+      },
+      {}
+    );
+    return assignedTicketsCountMap;
+  }
+
+  /**
+   * Retrieves the status counts of incidents for chart representation.
+   *
+   * @returns An object containing the status counts for each incident status.
+   *
+   * @author Jonathan Alvarado
+   */
   async getIncidentsStatusCountForChart() {
     const statusCounts = await this.incident.findAll({
       attributes: [

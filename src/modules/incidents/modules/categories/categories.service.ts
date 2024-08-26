@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
 import { PaginatedResponseDto } from 'src/dto/paginated-response.dto';
+import { Incident } from '../../models/incident.model';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { PatchCategoryDto } from './dto/patch-category.dto';
 import { QueryCategoryDto } from './dto/query-category.dto';
@@ -10,7 +11,8 @@ import { Category } from './models/category.model';
 @Injectable()
 export class CategoriesService {
   constructor(
-    @InjectModel(Category) private readonly category: typeof Category
+    @InjectModel(Category) private readonly category: typeof Category,
+    @InjectModel(Incident) private readonly incident: typeof Incident
   ) {}
 
   /**
@@ -32,6 +34,16 @@ export class CategoriesService {
    * @author Jonathan Alvarado
    */
   async delete(id: number) {
+    const incidents = await this.incident.findAll({
+      where: { categoryId: id },
+    });
+
+    if (incidents.length) {
+      throw new BadRequestException(
+        'Cannot delete category because it has associated incidents.'
+      );
+    }
+
     return await this.category.destroy({ where: { id } });
   }
 
