@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { FindOptions } from 'sequelize';
+import { FindAndCountOptions, FindOptions } from 'sequelize';
 import { PaginatedResponseDto } from 'src/dto/paginated-response.dto';
 import { hash } from 'src/helpers/hash';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -40,18 +40,27 @@ export class UsersService {
    * @author Jonathan Alvarado
    */
   async find(query: QueryUserDto) {
-    const { include, limit, order, orderBy, page, ...where } = query;
-    const { count: totalCount, rows: data } = await this.user.findAndCountAll({
+    const { include, limit, order, orderBy, page, pagination, ...where } =
+      query;
+    const sqlQuery: FindAndCountOptions = {
       include,
       limit,
       order: [[orderBy, order]],
       offset: (page - 1) * limit,
       where,
-    });
+    };
+
+    if (!pagination) {
+      delete sqlQuery.limit;
+      delete sqlQuery.offset;
+    }
+
+    const { count: totalCount, rows: data } =
+      await this.user.findAndCountAll(sqlQuery);
 
     return new PaginatedResponseDto({
       data,
-      limit,
+      limit: !pagination ? totalCount : limit,
       page,
       order,
       orderBy,

@@ -1,6 +1,12 @@
 import { ApiPropertyOptional, IntersectionType } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsInt, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsInt,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { PaginatedQueryDto } from 'src/dto/paginated-query.dto';
 import paramToArray from 'src/transforms/param-to-array.dto';
 import { PatchUserDto } from './patch-user.dto';
@@ -26,4 +32,13 @@ export class QueryUserDto extends IntersectionType(
   @IsOptional()
   @Type(() => Number)
   id: number;
+
+  @ApiPropertyOptional({
+    description: 'Whether to include pagination data',
+    example: true,
+    type: Boolean,
+  })
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === true)
+  pagination = true;
 }

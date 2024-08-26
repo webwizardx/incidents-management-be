@@ -63,7 +63,9 @@ export class IncidentsService {
     };
     await this.commentsService.create(commentPayload);
 
-    await this.autoAssignIncidentToUser(incident.id);
+    if (!incident.assignedTo) {
+      await this.autoAssignIncidentToUser(incident.id);
+    }
 
     return incident;
   }

@@ -12,7 +12,7 @@ module.exports = {
       return;
     }
 
-    const categories = ['issue'];
+    const categories = ['Falla'];
 
     const records = [];
 
