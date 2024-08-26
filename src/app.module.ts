@@ -29,16 +29,7 @@ import { UsersModule } from './modules/users/users.module';
         } else if (isLocal) {
           return databaseConfig['local'] as SequelizeModuleOptions;
         } else {
-          return {
-            autoLoadModels: true,
-            dialect: 'postgres',
-            dialectOptions: {
-              ssl: true,
-              native: true,
-            },
-            uri: configService.get('db.url', { infer: true }),
-            synchronize: true,
-          };
+          return databaseConfig['dev'] as SequelizeModuleOptions;
         }
       },
     }),
