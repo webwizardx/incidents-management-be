@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, StreamableFile } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { createPdf } from '@saemhco/nestjs-html-pdf';
+import { join } from 'path';
+import { cwd } from 'process';
 import sequelize, { FindOptions, Op } from 'sequelize';
 import { PaginatedResponseDto } from 'src/dto/paginated-response.dto';
 import { Order } from 'src/enum/order-by.enum';
@@ -146,9 +149,12 @@ export class IncidentsService {
         model: Incident,
       },
       group: ['user.id'],
+      limit: 10,
       order: [[sequelize.col('assignedTicketsCount'), Order.DESC]],
       subQuery: false,
-      limit: 15,
+      where: {
+        roleId: 2,
+      },
     });
 
     const assignedTicketsCountMap = assignedTicketsCount.reduce<ChartDataMap>(
@@ -169,6 +175,66 @@ export class IncidentsService {
       {}
     );
     return assignedTicketsCountMap;
+  }
+
+  /**
+   * Retrieves the count of assigned incidents for generating a chart PDF.
+   *
+   * @returns {Promise<StreamableFile>} A Promise that resolves to a StreamableFile object representing the generated PDF.
+   *
+   * @author Jonathan Alvarado
+   */
+  async getAssignedIncidentsCountForChartPdf(): Promise<StreamableFile> {
+    const assignedTicketsCount = await this.user.findAll({
+      attributes: [
+        'id',
+        'firstName',
+        'lastName',
+        [
+          sequelize.fn('count', sequelize.col('incidentsAssigned.id')),
+          'assignedTicketsCount',
+        ],
+      ],
+      include: {
+        as: 'incidentsAssigned',
+        model: Incident,
+      },
+      group: ['user.id'],
+      limit: 10,
+      order: [[sequelize.col('assignedTicketsCount'), Order.DESC]],
+      subQuery: false,
+      where: {
+        roleId: 2,
+      },
+    });
+    const data = assignedTicketsCount.map((result: any) => {
+      const assignedTicketsCount = result.toJSON().assignedTicketsCount;
+      return {
+        firstName: result?.firstName,
+        lastName: result?.lastName,
+        assignedTicketsCount,
+      };
+    }, {});
+    const currentDate = new Date().toLocaleDateString('en-GB');
+    const reportNumber = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(5, '0');
+    const templateVariables = {
+      data,
+      date: currentDate,
+      reportNumber,
+    };
+
+    const filePath = join(
+      cwd(),
+      'src/modules/incidents/pdf/getAssignedIncidentsCountForChartPdf.hbs'
+    );
+    const file = await createPdf(filePath, {}, templateVariables);
+    return new StreamableFile(file, {
+      disposition: `attachment; filename=getAssignedIncidentsCountForChartPdf.pdf`,
+      length: file.length,
+      type: 'application/pdf',
+    });
   }
 
   /**
@@ -242,6 +308,65 @@ export class IncidentsService {
         },
       }
     );
+  }
+
+  /**
+   * Retrieves the status counts of incidents for generating a chart PDF.
+   *
+   * @returns {Promise<StreamableFile>} A Promise that resolves to a StreamableFile object representing the generated PDF file.
+   *
+   * @author Jonathan Alvarado
+   */
+  async getIncidentsStatusCountForChartPdf(): Promise<StreamableFile> {
+    const statusCounts = await this.incident.findAll({
+      attributes: [
+        'statusId',
+        [sequelize.fn('count', sequelize.col('status_id')), 'incidentsCount'],
+      ],
+      group: ['status_id'],
+    });
+
+    const statusIdMap = {
+      1: STATUS.OPEN,
+      2: STATUS.IN_PROGRESS,
+      3: STATUS.CLOSED,
+    };
+    const i18n = {
+      [STATUS.CLOSED]: 'Cerrado',
+      [STATUS.IN_PROGRESS]: 'En Progreso',
+      [STATUS.OPEN]: 'Abierto',
+    };
+    let total = 0;
+    const data = statusCounts.map((result: any) => {
+      const status = statusIdMap[result.statusId];
+      const incidentsCount = result.toJSON().incidentsCount || 0;
+      total += incidentsCount;
+      return {
+        status: i18n[status],
+        incidentsCount,
+      };
+    });
+    const currentDate = new Date().toLocaleDateString('en-GB');
+    const reportNumber = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(5, '0');
+    const templateVariables = {
+      data,
+      date: currentDate,
+      reportNumber,
+      total,
+    };
+
+    const filePath = join(
+      cwd(),
+      'src/modules/incidents/pdf/getIncidentsStatusCountForChartPdf.hbs'
+    );
+    const file = await createPdf(filePath, {}, templateVariables);
+    return new StreamableFile(file, {
+      disposition: `attachment; filename=getIncidentsStatusCountForChartPdf.pdf`,
+      length: file.length,
+      type: 'application/pdf',
+    });
   }
 
   /**

@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -79,6 +80,18 @@ export class IncidentsController {
 
   @ApiOperation({
     description:
+      'This endpoint is used to export the count of incidents assigned to a user as a PDF',
+    summary: 'Export the count of incidents assigned to a user as a PDF',
+  })
+  @CheckPolicies(new ReadIncidentPolicyHandler(), new ReadUserPolicyHandler())
+  @Header('Cache-Control', 'no-cache, no-store, must-revalidate')
+  @Get('assigned-incidents-count-for-chart/export/pdf')
+  async getAssignedTicketsCountForChartPdf() {
+    return this.incidentsService.getAssignedIncidentsCountForChartPdf();
+  }
+
+  @ApiOperation({
+    description:
       'This endpoint is used to get the count of incidents by status',
     summary: 'Get the count of incidents by status',
   })
@@ -86,6 +99,18 @@ export class IncidentsController {
   @Get('status-count-for-chart')
   async getIncidentsStatusCountForChart() {
     return this.incidentsService.getIncidentsStatusCountForChart();
+  }
+
+  @ApiOperation({
+    description:
+      'This endpoint is used to export the count of incidents by status as a PDF',
+    summary: 'Export the count of incidents by status as a PDF',
+  })
+  @CheckPolicies(new ReadIncidentPolicyHandler())
+  @Header('Cache-Control', 'no-cache, no-store, must-revalidate')
+  @Get('status-count-for-chart/export/pdf')
+  async getIncidentsStatusCountForChartPdf() {
+    return this.incidentsService.getIncidentsStatusCountForChartPdf();
   }
 
   @ApiOperation({

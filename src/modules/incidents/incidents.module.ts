@@ -13,10 +13,10 @@ import { StatusModule } from './modules/status/status.module';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Category, Comment, Incident, Status, User]),
-    StatusModule,
     CategoriesModule,
     CommentsModule,
+    SequelizeModule.forFeature([Category, Comment, Incident, Status, User]),
+    StatusModule,
   ],
   controllers: [IncidentsController],
   providers: [IncidentsService],

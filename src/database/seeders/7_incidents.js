@@ -16,11 +16,30 @@ module.exports = {
 
     const records = [];
 
-    for (let i = 0; i < 3; ++i) {
+    for (let i = 0; i < 10; ++i) {
       records.push({
+        assigned_to: 2,
         category_id: 1,
         owner_id: 1,
         status_id: 1,
+        title: faker.word.words(10),
+      });
+    }
+    for (let i = 0; i < 6; ++i) {
+      records.push({
+        assigned_to: 5,
+        category_id: 1,
+        owner_id: 1,
+        status_id: 2,
+        title: faker.word.words(10),
+      });
+    }
+    for (let i = 0; i < 3; ++i) {
+      records.push({
+        assigned_to: 7,
+        category_id: 1,
+        owner_id: 1,
+        status_id: 3,
         title: faker.word.words(10),
       });
     }

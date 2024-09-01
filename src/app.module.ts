@@ -22,6 +22,7 @@ import { UsersModule } from './modules/users/users.module';
       useFactory: async (configService: ConfigService<Config>) => {
         const databaseConfig = await import('./config/database.config.json');
         const env = configService.get('env');
+        console.log('env', env);
         const isTEST = /test/i.test(env);
         const isLocal = /local/i.test(env);
         if (isTEST) {
