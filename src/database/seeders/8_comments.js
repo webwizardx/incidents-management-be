@@ -123,7 +123,7 @@ module.exports = {
         records.push({
           content: comments[i][j - 1],
           incident_id: incident.id,
-          user_id: j,
+          user_id: j === 1 ? incident.owner_id : incident.assigned_to,
         });
       }
     }
