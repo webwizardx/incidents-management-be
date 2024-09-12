@@ -12,7 +12,13 @@ module.exports = {
       return;
     }
 
-    const categories = ['Falla'];
+    const categories = [
+      'Falla',
+      'Falla Masivos',
+      'Falla Rector',
+      'Falla Sirweb',
+      'Falla Travel',
+    ];
 
     const records = [];
 
